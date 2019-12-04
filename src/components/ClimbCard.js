@@ -17,7 +17,7 @@ class ClimbCard extends Component {
 
     return (
       <Fragment >
-        <img alt={this.props.climbDetails.name} src={this.props.climbDetails.imgSmallMed}/>
+        <img id={this.props.climbDetails.id} onClick={this.props.showClimbPage} alt={this.props.climbDetails.name} src={this.props.climbDetails.imgSmallMed}/>
           <br></br>
           <div>
             <h3>{this.props.climbDetails.name} {' | '} {this.props.climbDetails.rating}</h3>

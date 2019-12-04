@@ -1,18 +1,21 @@
 import React from 'react';
 import '../App.css';
-import Nav from './Nav';
-// import climbs from '../climbdata';
-import ClimbContainer from './ClimbContainer';
+import Nav from './Nav.js';
+import ClimbContainer from './ClimbContainer.js';
 import ButtonContainer from "./ButtonContainer.js"
 import LoginForm from "./LoginForm.js"
 import SignupForm from "./SignupForm.js"
+import ClimbPage from './ClimbPage.js'
 
 
 class App extends React.Component {
 
   state = {
     climbs: [],
-    menuType: null
+    menuType: null,
+    isDisplaying: false,
+    displayClimb: {}
+
   }
 
   changeToLogin = () => {
@@ -56,12 +59,31 @@ class App extends React.Component {
     }
   }
 
+
+  showClimbPage= (event) => {
+    console.log(event.target.id)
+    this.setState({
+      isDisplaying: true,
+      displayClimb: this.state.climbs.find(climb => parseInt(climb.id) === parseInt(event.target.id))
+    })
+  }
+
+  displayAllClimbs= () => {
+
+    this.setState({
+      isDisplaying: false
+    })
+  }
+
+
+
   render() {
+    console.log(this.state.displayClimb)
 
     return (
       <div className='App'>
         < Nav renderMenu={this.renderMenu} />
-        < ClimbContainer climbs={this.state.climbs} />
+      {this.state.isDisplaying ? <ClimbPage climbInfo={this.state.displayClimb} displayAllClimbs={this.displayAllClimbs}/> : < ClimbContainer showClimbPage={this.showClimbPage} climbs={this.state.climbs} /> }
         {/* < Climb Details /> */}
       </div>
     )
