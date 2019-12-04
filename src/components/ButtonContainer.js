@@ -4,7 +4,7 @@ const ButtonContainer = (props) => {
 	return (
 		
 			<div>
-				<button onClick={props.loginClick} >Sign In</button>
+				<button onClick={props.loginClick} >Log In</button>
 				<button onClick={props.signupClick} >Sign Up</button>
 			</div>
 	)

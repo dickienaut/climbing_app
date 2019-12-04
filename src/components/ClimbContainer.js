@@ -5,9 +5,6 @@ import ClimbCard from './ClimbCard'
 
 class ClimbContainer extends React.Component {
 
-  // state = {
-  //     climbs: this.props.climbs
-  // }
 
   render() {
     console.log(this.props)
