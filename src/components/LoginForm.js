@@ -16,8 +16,18 @@ export default class LoginForm extends React.Component {
                password: event.target.value
            })
           }
+          handleSubmit = (e) => {
+              e.preventDefault();
+              
+              fetch('http://localhost:3000/users')
+              .then(r => r.json())
+              .then(users => {
+                  let u = users.find(user => user.email === this.state.email)
+                  this.props.handleLogin(u)
+              })
+          }
     render(){
-        return(<form>
+        return(<form onSubmit={this.handleSubmit}>
             <label for="email-field" />
             <input type="text" onChange={this.emailChange} placeholder="email" id="email-field" name="email" value={this.state.email} />
             <label for="password-field" />

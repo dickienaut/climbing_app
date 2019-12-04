@@ -6,6 +6,8 @@ import ButtonContainer from "./ButtonContainer.js"
 import LoginForm from "./LoginForm.js"
 import SignupForm from "./SignupForm.js"
 import ClimbPage from './ClimbPage.js'
+import ProfilePage from './ProfilePage.js'
+import { Route, Switch, Link, NavLink } from 'react-router-dom'
 
 
 class App extends React.Component {
@@ -14,9 +16,11 @@ class App extends React.Component {
     climbs: [],
     menuType: null,
     isDisplaying: false,
-    displayClimb: {}
-
+    displayClimb: {},
+    session: false,
+    loggedInUser: null
   }
+
 
   changeToLogin = () => {
     this.setState({
@@ -51,16 +55,16 @@ class App extends React.Component {
       case null:
         return <ButtonContainer signupClick={this.changeToSignup} loginClick={this.changeToLogin} />
       case "signup":
-        return <SignupForm backButtonClick={this.menuBack} />
+        return <SignupForm backButtonClick={this.menuBack} handleLogin={this.handleLogin}  />
       case "login":
-        return <LoginForm backButtonClick={this.menuBack} />
+        return <LoginForm backButtonClick={this.menuBack} handleLogin={this.handleLogin}  />
       default:
         return <ButtonContainer signupClick={this.changeToSignup} loginClick={this.changeToLogin} />
     }
   }
 
 
-  showClimbPage= (event) => {
+  showClimbPage = (event) => {
     console.log(event.target.id)
     this.setState({
       isDisplaying: true,
@@ -75,16 +79,59 @@ class App extends React.Component {
     })
   }
 
+  handleLogin = (user) =>{
+    this.setState({
+      session: true,
+      loggedInUser: user
+    })
+  }
 
+  handleLogout = () => {
+    this.setState({
+      session: false,
+      loggedInUser: null
+    })
+  }
+
+ renderClimbs = () => {
+ if (this.state.isDisplaying) {
+  return <ClimbPage info={this.state} climbInfo={this.state.displayClimb} displayAllClimbs={this.displayAllClimbs}/>
+ } else { 
+  return < ClimbContainer showClimbPage={this.showClimbPage} climbs={this.state.climbs} /> 
+ }
+}
+
+ renderProfilePage = () => {
+   return <ProfilePage onEdit={this.handleLogin} user={this.state.loggedInUser}/>
+ }
 
   render() {
-    console.log(this.state.displayClimb)
 
     return (
       <div className='App'>
-        < Nav renderMenu={this.renderMenu} />
-      {this.state.isDisplaying ? <ClimbPage climbInfo={this.state.displayClimb} displayAllClimbs={this.displayAllClimbs}/> : < ClimbContainer showClimbPage={this.showClimbPage} climbs={this.state.climbs} /> }
-        {/* < Climb Details /> */}
+        <header className="App-header">
+        < Nav handleLogout={this.handleLogout} renderMenu={this.renderMenu} isLoggedIn={this.state.session} loggedInUser={this.state.loggedInUser} />
+        <aside className="sidebar">
+            <ul>
+              <li>
+                <NavLink exact to="/">Home</NavLink>
+              </li>
+              <li>
+                <NavLink exact to="/climbs">Climbs</NavLink>
+              </li>
+
+              {
+                this.state.session ? <NavLink exact to="/profile">My Profile</NavLink> : null
+              }
+              
+            </ul>
+          </aside>
+         </header>
+         <Switch>
+           <Route path="/climbs" render={this.renderClimbs} />
+           <Route path="/profile" render={this.renderProfilePage} />
+         </Switch>
+      {/* {this.state.isDisplaying ? <ClimbPage info={this.state} climbInfo={this.state.displayClimb} displayAllClimbs={this.displayAllClimbs}/> : < ClimbContainer showClimbPage={this.showClimbPage} climbs={this.state.climbs} /> } */}
       </div>
     )
   }

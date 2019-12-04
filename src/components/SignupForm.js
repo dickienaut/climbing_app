@@ -16,9 +16,30 @@ export default class SignupForm extends React.Component {
                password: event.target.value
            })
           }
+
+          handleSubmit = (e) => {
+            e.preventDefault();
+            
+            fetch('http://localhost:3000/users',{
+             method: "POST",
+             body: JSON.stringify({
+              email: this.state.email,
+              password_digest: this.state.password
+             }),
+             headers: {
+                 'Content-Type': 'application/json',
+                 'Accept': 'application/json'
+               }
+          })
+            .then(r => r.json())
+            .then(user => {
+                this.props.handleLogin(user)
+            })
+        }
+
     render(){
         return(
-        <form>
+        <form onSubmit={this.handleSubmit}>
             <label for="email-field" />
             <input type="text" onChange={this.emailChange} placeholder="email" id="email-field" name="email" value={this.state.email} />
             <label for="password-field" />

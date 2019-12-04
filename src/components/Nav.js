@@ -1,13 +1,12 @@
 import React from 'react'
+import WelcomeNav from './WelcomeNav.js'
 
 const Nav = (props) => {
 	return (
 		<div className="navWrapper">
-			<span className="headerText">Your Climbs</span>
-			<div className="YourClimbs">
-			</div>
+			<span className="headerText">Your Climbs</span><br></br>
 			<span className="normalText">A React App for your climbs</span>
-			{props.renderMenu()}
+			{props.isLoggedIn ? <WelcomeNav logout={props.handleLogout} user={props.loggedInUser} /> : props.renderMenu()}
 
 		</div>
 	)

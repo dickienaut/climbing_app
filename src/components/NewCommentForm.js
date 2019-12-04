@@ -12,7 +12,9 @@ export default class NewCommentForm extends React.Component {
         })
        }
 
-       handleSubmit = () => {
+       handleSubmit = (e) => {
+           e.preventDefault();
+           
            fetch('http://localhost:3000/comments',{
             method: "POST",
             body: JSON.stringify({
@@ -27,7 +29,7 @@ export default class NewCommentForm extends React.Component {
          })
            .then(r => r.json())
            .then(comment => {
-               console.log(comment)
+               this.props.addComment(comment)
            })
        }
 
