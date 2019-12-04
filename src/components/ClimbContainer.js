@@ -5,13 +5,14 @@ import ClimbCard from './ClimbCard'
 
 class ClimbContainer extends React.Component {
 
-  state = {
-      climbs: this.props.climbs
-  }
+  // state = {
+  //     climbs: this.props.climbs
+  // }
 
   render() {
+    console.log(this.props)
 
-    const climbs = this.state.climbs.map((climb) => <div> <ClimbCard climbDetails={ climb } /></div> )
+    const climbs = this.props.climbs.map((climb) => <div key={climb.id} className="climb-card"> <ClimbCard climbDetails={ climb } /></div> )
 
 
     return (
