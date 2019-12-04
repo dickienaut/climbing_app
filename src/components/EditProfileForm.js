@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 
 
 export default class EditProfileForm extends React.Component {
@@ -38,13 +38,20 @@ export default class EditProfileForm extends React.Component {
             })
         }
 
+        handleDelete = () => {
+            this.props.deleteProfile(this.props.user.id)
+        }
+
     render(){
         return(
+            <Fragment>
             <form onSubmit={this.handleSubmit}>
                 <input onChange={this.emailChange} type="text" placeholder="New email..." value={this.state.email} />
                 <input onChange={this.passwordChange} type="password" placeholder="New password..." value={this.state.password}/>
                 <input type="submit" value="Save" />
             </form>
+            <button onClick={this.handleDelete} >Delete Profile</button>
+            </Fragment>
         )
     }
 

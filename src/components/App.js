@@ -7,7 +7,7 @@ import LoginForm from "./LoginForm.js"
 import SignupForm from "./SignupForm.js"
 import ClimbPage from './ClimbPage.js'
 import ProfilePage from './ProfilePage.js'
-import { Route, Switch, Link, NavLink } from 'react-router-dom'
+import { Route, Switch, NavLink, Redirect } from 'react-router-dom'
 
 
 class App extends React.Component {
@@ -91,19 +91,38 @@ class App extends React.Component {
       session: false,
       loggedInUser: null
     })
+    return <Redirect to='/' />
   }
 
- renderClimbs = () => {
- if (this.state.isDisplaying) {
-  return <ClimbPage info={this.state} climbInfo={this.state.displayClimb} displayAllClimbs={this.displayAllClimbs}/>
- } else { 
-  return < ClimbContainer showClimbPage={this.showClimbPage} climbs={this.state.climbs} /> 
- }
-}
+  renderClimbs = () => {
+  if (this.state.isDisplaying) {
+    return <ClimbPage info={this.state} climbInfo={this.state.displayClimb} displayAllClimbs={this.displayAllClimbs}/>
+  } else { 
+    return < ClimbContainer showClimbPage={this.showClimbPage} climbs={this.state.climbs} /> 
+  }
+  }
 
- renderProfilePage = () => {
-   return <ProfilePage onEdit={this.handleLogin} user={this.state.loggedInUser}/>
- }
+  renderProfilePage = () => {
+    return <ProfilePage deleteProfile={this.deleteProfile} onEdit={this.handleLogin} user={this.state.loggedInUser}/>
+  }
+
+
+
+
+  deleteProfile = (user_id) => {
+    fetch(`http://localhost:3000/users/${user_id}`, {
+      method: 'DELETE',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify({id: user_id})
+      })
+      .then(res => res.json()) // OR res.json()
+      .then(res => 
+        // res.remove()
+        this.handleLogout()
+      )
+  }
+
+
 
   render() {
 
