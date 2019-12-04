@@ -13,7 +13,7 @@ class App extends React.Component {
       <div className='App'>
         < Nav />
         < ClimbContainer climbs={climbs} />
-        < Climb Details />
+        {/* < Climb Details /> */}
       </div>
     )
   }
