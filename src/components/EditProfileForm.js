@@ -1,10 +1,12 @@
 import React, {Fragment} from 'react'
+import { Redirect } from 'react-router-dom'
 
 
 export default class EditProfileForm extends React.Component {
     state = {
         email: "",
-        password: ""
+        password: "",
+        redirect: false
     }
     emailChange = (event) => {
         this.setState({
@@ -39,7 +41,11 @@ export default class EditProfileForm extends React.Component {
         }
 
         handleDelete = () => {
-            this.props.deleteProfile(this.props.user.id)
+            this.props.deleteProfile(this.props.user.id);
+
+            this.setState({
+                redirect: true
+            });
         }
 
     render(){
@@ -51,6 +57,7 @@ export default class EditProfileForm extends React.Component {
                 <input type="submit" value="Save" />
             </form>
             <button onClick={this.handleDelete} >Delete Profile</button>
+            {this.state.redirect ? <Redirect to='/' /> : null}
             </Fragment>
         )
     }

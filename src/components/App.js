@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import '../App.css';
 import Nav from './Nav.js';
+import AboutPage from './AboutPage.js'
 import ClimbContainer from './ClimbContainer.js';
 import ButtonContainer from "./ButtonContainer.js"
 import LoginForm from "./LoginForm.js"
@@ -82,7 +83,8 @@ class App extends React.Component {
   handleLogin = (user) =>{
     this.setState({
       session: true,
-      loggedInUser: user
+      loggedInUser: user,
+      menuType: null
     })
   }
 
@@ -91,7 +93,6 @@ class App extends React.Component {
       session: false,
       loggedInUser: null
     })
-    return <Redirect to='/' />
   }
 
   renderClimbs = () => {
@@ -103,7 +104,9 @@ class App extends React.Component {
   }
 
   renderProfilePage = () => {
-    return <ProfilePage deleteProfile={this.deleteProfile} onEdit={this.handleLogin} user={this.state.loggedInUser}/>
+    return (<Fragment>
+      {this.state.session ? <ProfilePage deleteProfile={this.deleteProfile} onEdit={this.handleLogin} user={this.state.loggedInUser}/> : <Redirect to='/' /> }
+    </Fragment>)
   }
 
 
@@ -112,14 +115,22 @@ class App extends React.Component {
   deleteProfile = (user_id) => {
     fetch(`http://localhost:3000/users/${user_id}`, {
       method: 'DELETE',
-      headers: {'content-type': 'application/json'},
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({id: user_id})
       })
       .then(res => res.json()) // OR res.json()
-      .then(res => 
-        // res.remove()
-        this.handleLogout()
+      .then(deletedUser => 
+        this.setState({
+          session: false,
+          loggedInUser: null
+        })
       )
+      .catch(error => {
+        this.setState({
+          session: false,
+          loggedInUser: null
+        })
+      })
   }
 
 
@@ -149,6 +160,7 @@ class App extends React.Component {
          <Switch>
            <Route path="/climbs" render={this.renderClimbs} />
            <Route path="/profile" render={this.renderProfilePage} />
+           <Route path="/" component={ AboutPage } />
          </Switch>
       {/* {this.state.isDisplaying ? <ClimbPage info={this.state} climbInfo={this.state.displayClimb} displayAllClimbs={this.displayAllClimbs}/> : < ClimbContainer showClimbPage={this.showClimbPage} climbs={this.state.climbs} /> } */}
       </div>
